@@ -1,0 +1,8 @@
+### THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
+
+postmaster: root
+webmaster: root
+
+# We want root's mail to be forwarded to the real server admin. This is useful 
+# for certain services that can only send mail to local root user.
+root: <%= serveradmin %>

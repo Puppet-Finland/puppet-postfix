@@ -1,0 +1,41 @@
+### THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
+
+alias_maps = <%= scope.lookupvar('postfix::params::alias_maps') %>
+alias_database = <%= scope.lookupvar('postfix::params::alias_database') %>
+daemon_directory = <%= scope.lookupvar('postfix::params::daemon_directory') %>
+command_directory = <%= scope.lookupvar('postfix::params::command_directory') %>
+
+smtpd_banner = $myhostname ESMTP $mail_name (<%= operatingsystem %>)
+biff = no
+append_dot_mydomain = no
+readme_directory = no
+
+smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_use_tls=yes
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+# Please make sure $::fqdn fact exists. If necessary, add an entry to to 
+# /etc/hosts.
+myhostname = <%= fqdn %>
+myorigin = <%= fqdn %>
+
+<% if domain_mail_server == "yes" %>
+# This mail server receives mail for the whole domain
+mydomain = <%= domain %>
+mydestination = <%= fqdn %> localhost.<%= domain %> localhost <%= domain %>
+<% else %>
+# This mail server receives mail only for itself
+mydestination = <%= fqdn %> localhost.<%= domain %> localhost
+<% end %>
+
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 <%= scope.lookupvar('postfix::config::allow_ipv4_address') %> [<%= scope.lookupvar('postfix::config::allow_ipv6_address') %>]/<%= scope.lookupvar('postfix::config::allow_ipv6_netmask') %>
+relayhost = 
+relay_domains =
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+
+smtpd_client_restrictions = permit_mynetworks, reject
+smtp_host_lookup = dns, native

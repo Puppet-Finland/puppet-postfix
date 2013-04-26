@@ -1,0 +1,10 @@
+### THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
+#
+# This is taken directly from here, with permission from authors:
+#
+# <http://mmonit.com/wiki/Monit/ConfigurationExamples#postfix>
+
+check process postfix with pidfile /var/spool/postfix/pid/master.pid
+   start program = "/etc/init.d/postfix start"
+   stop  program = "/etc/init.d/postfix stop"
+   if failed port 25 protocol smtp then restart
