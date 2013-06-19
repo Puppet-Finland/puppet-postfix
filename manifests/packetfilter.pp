@@ -10,7 +10,7 @@ class postfix::packetfilter(
 {
 
     # IPv4 rules
-    firewall { "014 ipv4 accept smtp port from $ipv4_address":
+    firewall { '014 ipv4 accept smtp port':
         provider => 'iptables',
         chain => 'INPUT',
         proto => 'tcp',
@@ -20,7 +20,7 @@ class postfix::packetfilter(
     }
 
     # IPv6 rules
-    firewall { "014 ipv6 accept smtp port from $ipv6_address":
+    firewall { '014 ipv6 accept smtp port':
         provider => 'ip6tables',
         chain => 'INPUT',
         proto => 'tcp',
