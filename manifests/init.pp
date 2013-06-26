@@ -20,6 +20,9 @@
 #   The netmask of the IPv6 subnet from which to allow connections. Defaults to
 #   128. This is required because postfix needs IPv6 addresses in [::1]/128
 #   format, which conflicts with puppet's array definitions.
+# [*monitor_email*]
+#   Email address where local service monitoring software sends it's reports to.
+#   Defaults to top scope variable $::servermonitor.
 #
 # == Examples
 #
@@ -34,6 +37,7 @@
 # == Authors
 #
 # Samuli Seppänen <samuli.seppanen@gmail.com>
+# Samuli Seppänen <samuli@openvpn.net>
 # Mikko Vilpponen <vilpponen@protecomp.fi>
 #
 # == License
@@ -46,7 +50,8 @@ class postfix(
     $domain_mail_server = 'no',
     $allow_ipv4_address = '127.0.0.1',
     $allow_ipv6_address = '::1',
-    $allow_ipv6_netmask = '128'
+    $allow_ipv6_netmask = '128',
+    $monitor_email = $::servermonitor
 )
 {
     # SuSE has a very different idea of how we configure postfix, so for the 
@@ -56,7 +61,9 @@ class postfix(
         include postfix::service
 
         if tagged('monit') {
-            include postfix::monit
+            class { 'postfix::monit':
+                monitor_email => $monitor_email,
+            }
         }
     }
     elsif $::operatingsystem == 'SLES' {
@@ -81,7 +88,9 @@ class postfix(
         }
 
         if tagged('monit') {
-            include postfix::monit
+            class { 'postfix::monit':
+                monitor_email => $monitor_email,
+            }
         }
     }
 }

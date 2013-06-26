@@ -8,3 +8,4 @@ check process postfix with pidfile /var/spool/postfix/pid/master.pid
    start program = "/etc/init.d/postfix start"
    stop  program = "/etc/init.d/postfix stop"
    if failed port 25 protocol smtp then restart
+   alert <%= scope.lookupvar('postfix::monit::monitor_email') %> with reminder on 480 cycles
