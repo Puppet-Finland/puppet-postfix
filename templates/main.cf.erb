@@ -35,7 +35,7 @@ relayhost =
 relay_domains =
 mailbox_size_limit = 0
 recipient_delimiter = +
-inet_interfaces = all
+inet_interfaces = <%= scope.lookupvar('postfix::config::inet_interfaces') %>
 
 smtpd_client_restrictions = permit_mynetworks, reject
 smtp_host_lookup = dns, native

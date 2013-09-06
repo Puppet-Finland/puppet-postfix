@@ -6,6 +6,7 @@
 class postfix::config(
     $serveradmin = 'none',
     $domain_mail_server,
+    $inet_interfaces,
     $allow_ipv4_address,
     $allow_ipv6_address,
     $allow_ipv6_netmask

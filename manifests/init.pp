@@ -11,6 +11,9 @@
 # [*domain_mail_server*]
 #   Selects whether to configure this postfix instance to receive mail for the
 #   entire domain, or only for itself. Defaults to 'no'.
+# [*inet_interfaces*]
+#   Interfaces and/or IPv4/IPv6 addresses on which postfix will listen on. 
+#   Special values are 'all' and 'loopback-only'. Defaults to 'loopback-only'.
 # [*allow_ipv4_address*]
 #   Allow SNMP connections from this IPv4 address/subnet. Defaults to 127.0.0.1.
 # [*allow_ipv6_address*]
@@ -29,6 +32,7 @@
 # class {'postfix':
 #   serveradmin => 'my.admin.email@domain.tld',
 #   domain_mail_server => 'yes',
+#   inet_interfaces => 'all'
 #   allow_ipv4_address => '192.168.0.0/24',
 #   allow_ipv6_address => '::1',
 #   allow_ipv6_netmask => '128'
@@ -48,6 +52,7 @@
 class postfix(
     $serveradmin = $::serveradmin,
     $domain_mail_server = 'no',
+    $inet_interfaces = 'loopback-only',
     $allow_ipv4_address = '127.0.0.1',
     $allow_ipv6_address = '::1',
     $allow_ipv6_netmask = '128',
@@ -71,14 +76,21 @@ class postfix(
     }
     else {
         include postfix::install
+
         class {'postfix::config':
             serveradmin => $serveradmin,
             domain_mail_server => $domain_mail_server,
+            inet_interfaces => $inet_interfaces,
             allow_ipv4_address => $allow_ipv4_address,
             allow_ipv6_address => $allow_ipv6_address,
             allow_ipv6_netmask => $allow_ipv6_netmask,
         }
         include postfix::service
+
+        # FreeBSD requires additional configuration
+        if $::operatingsystem == 'FreeBSD' {
+            include postfix::config::freebsd
+        }
 
         if tagged('packetfilter') {
             class {'postfix::packetfilter':
