@@ -59,6 +59,10 @@ class postfix(
     $monitor_email = $::servermonitor
 )
 {
+
+# Rationale for this is explained in init.pp of the sshd module
+if hiera('manage_postfix') != 'false' {
+
     # SuSE has a very different idea of how we configure postfix, so for the 
     # time being it's only partially supported.
     if $::operatingsystem == 'OpenSuSE' {
@@ -105,4 +109,5 @@ class postfix(
             }
         }
     }
+}
 }
