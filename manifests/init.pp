@@ -61,7 +61,7 @@ class postfix(
 {
 
 # Rationale for this is explained in init.pp of the sshd module
-if hiera('manage_postfix') != 'false' {
+if hiera('manage_postfix', 'true') != 'false' {
 
     # SuSE has a very different idea of how we configure postfix, so for the 
     # time being it's only partially supported.
