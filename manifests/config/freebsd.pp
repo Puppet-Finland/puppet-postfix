@@ -6,14 +6,14 @@
 #
 class postfix::config::freebsd {
 
-    include postfix::params
+    include os::params
 
     file { 'postfix-mailer.conf':
         name => '/etc/mail/mailer.conf',
         ensure => present,
         content => template('postfix/mailer.conf.erb'),
         owner => root,
-        group => "${::postfix::params::admingroup}",
+        group => "${::os::params::admingroup}",
         mode => 644,
     }
 

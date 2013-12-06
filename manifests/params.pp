@@ -12,7 +12,6 @@ class postfix::params {
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/libexec/postfix'
             $command_directory = '/usr/sbin'
-            $admingroup = 'root'
             $service_name = 'postfix'
             $service_command = "/sbin/service $service_name"
         }
@@ -23,7 +22,6 @@ class postfix::params {
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/lib/postfix'
             $command_directory = '/usr/sbin'
-            $admingroup = 'root'
             $service_name = 'postfix'
             $service_command = "/sbin/service $service_name"
         }
@@ -34,7 +32,6 @@ class postfix::params {
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/lib/postfix'
             $command_directory = '/usr/sbin'
-            $admingroup = 'root'
             $service_name = 'postfix'
             $service_command = "/usr/sbin/service $service_name"
         }
@@ -45,7 +42,6 @@ class postfix::params {
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/local/libexec/postfix'
             $command_directory = '/usr/local/sbin'
-            $admingroup = 'wheel'
             $service_name = 'postfix'
             $service_command = "/usr/local/etc/rc.d/$service_name"
         }
@@ -56,7 +52,6 @@ class postfix::params {
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/lib/postfix'
             $command_directory = '/usr/sbin'
-            $admingroup = 'root'
             $service_name = 'postfix'
             $service_command = "/usr/sbin/service $service_name"
         }

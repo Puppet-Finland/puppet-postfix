@@ -13,6 +13,7 @@ class postfix::config(
 )
 {
 
+    include os::params
     include postfix::params
 
     file { 'postfix-main.cf':
@@ -20,7 +21,7 @@ class postfix::config(
         content => template('postfix/main.cf.erb'),
         ensure => present,
         owner => root,
-        group => "${::postfix::params::admingroup}",
+        group => "${::os::params::admingroup}",
         mode  => 644,
         require => Class['postfix::install'],
         notify => Class['postfix::service'],
