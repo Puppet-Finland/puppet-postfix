@@ -5,7 +5,7 @@
 # <http://mmonit.com/wiki/Monit/ConfigurationExamples#postfix>
 
 check process postfix with pidfile /var/spool/postfix/pid/master.pid
-   start program "<%= scope.lookupvar('postfix::params::service_command') %> start"
-   stop program "<%= scope.lookupvar('postfix::params::service_command') %> stop"
+   start program "<%= scope.lookupvar('postfix::params::service_start') %>"
+   stop program "<%= scope.lookupvar('postfix::params::service_stop') %>"
    if failed port 25 protocol smtp then restart
    alert <%= scope.lookupvar('postfix::monit::monitor_email') %> with reminder on 480 cycles
