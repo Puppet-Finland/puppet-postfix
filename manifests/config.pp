@@ -5,6 +5,7 @@
 #
 class postfix::config(
     $serveradmin = 'none',
+    $relayhost,
     $domain_mail_server,
     $inet_interfaces,
     $allow_ipv4_address,

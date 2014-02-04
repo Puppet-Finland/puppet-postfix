@@ -8,6 +8,9 @@
 # [*serveradmin*]
 #   An email address where mail for root should be sent to. Defaults to the top-scope
 #   variable $::serveradmin.
+# [*relayhost*]
+#   The host used for relaying mail. Defaults to '' which means that Postfix 
+#   will try to send mail directly. 
 # [*domain_mail_server*]
 #   Selects whether to configure this postfix instance to receive mail for the
 #   entire domain, or only for itself. Defaults to 'no'.
@@ -51,6 +54,7 @@
 #
 class postfix(
     $serveradmin = $::serveradmin,
+    $relayhost = '',
     $domain_mail_server = 'no',
     $inet_interfaces = 'loopback-only',
     $allow_ipv4_address = '127.0.0.1',
@@ -83,6 +87,7 @@ if hiera('manage_postfix', 'true') != 'false' {
 
         class {'postfix::config':
             serveradmin => $serveradmin,
+            relayhost => $relayhost,
             domain_mail_server => $domain_mail_server,
             inet_interfaces => $inet_interfaces,
             allow_ipv4_address => $allow_ipv4_address,

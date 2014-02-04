@@ -31,7 +31,7 @@ mydestination = <%= fqdn %> localhost.<%= domain %> localhost
 <% end %>
 
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 <%= scope.lookupvar('postfix::config::allow_ipv4_address') %> [<%= scope.lookupvar('postfix::config::allow_ipv6_address') %>]/<%= scope.lookupvar('postfix::config::allow_ipv6_netmask') %>
-relayhost = 
+relayhost = <%= scope.lookupvar('postfix::config::relayhost') %>
 relay_domains =
 mailbox_size_limit = 0
 recipient_delimiter = +
