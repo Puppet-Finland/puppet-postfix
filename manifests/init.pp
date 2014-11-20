@@ -32,25 +32,26 @@
 #
 # == Examples
 #
-# class {'postfix':
-#   serveradmin => 'my.admin.email@domain.tld',
-#   domain_mail_server => 'yes',
-#   inet_interfaces => 'all'
-#   allow_ipv4_address => '192.168.0.0/24',
-#   allow_ipv6_address => '::1',
-#   allow_ipv6_netmask => '128'
-# }
+#   class {'postfix':
+#       serveradmin => 'my.admin.email@domain.tld',
+#       domain_mail_server => 'yes',
+#       inet_interfaces => 'all'
+#       allow_ipv4_address => '192.168.0.0/24',
+#       allow_ipv6_address => '::1',
+#       allow_ipv6_netmask => '128'
+#   }
 #
 # == Authors
 #
 # Samuli Seppänen <samuli.seppanen@gmail.com>
+#
 # Samuli Seppänen <samuli@openvpn.net>
+#
 # Mikko Vilpponen <vilpponen@protecomp.fi>
 #
 # == License
 #
-# BSD-lisence
-# See file LICENSE for details
+# BSD-license. See file LICENSE for details.
 #
 class postfix(
     $serveradmin = $::serveradmin,
