@@ -3,10 +3,12 @@
 #
 # Configures packet filtering rules for postfix
 #
-class postfix::packetfilter(
+class postfix::packetfilter
+(
     $ipv4_address = '127.0.0.1',
     $ipv6_address = '::1'
-)
+
+) inherits postfix::params
 {
 
     # IPv4 rules

@@ -4,6 +4,8 @@
 # Defines some variables based on the operating system
 class postfix::params {
 
+    include os::params
+
     case $::osfamily {
         'RedHat': {
             $package_name = 'postfix'

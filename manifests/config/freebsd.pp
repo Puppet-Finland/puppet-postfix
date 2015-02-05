@@ -4,7 +4,8 @@
 # FreeBSD-specific postfix configuration. Currently used to disable sendmail and 
 # to make postfix the default MTA.
 #
-class postfix::config::freebsd {
+class postfix::config::freebsd inherits postfix::params
+{
 
     include os::params
 

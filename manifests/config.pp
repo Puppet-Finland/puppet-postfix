@@ -13,10 +13,10 @@ class postfix::config
     $allow_ipv4_address,
     $allow_ipv6_address,
     $allow_ipv6_netmask
-)
+
+) inherits postfix::params
 {
 
-    include os::params
     include postfix::params
 
     file { 'postfix-main.cf':
