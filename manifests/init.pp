@@ -17,6 +17,10 @@
 # [*inet_interfaces*]
 #   Interfaces and/or IPv4/IPv6 addresses on which postfix will listen on. 
 #   Special values are 'all' and 'loopback-only'. Defaults to 'loopback-only'.
+# [*smtp_host_lookup*]
+#   Value of smtp_host_lookup parameter in main.cf. Defaults to 'dns, native', 
+#   which typically seems to work best. In some cases reversing this lookup 
+#   order helps.
 # [*allow_ipv4_address*]
 #   Allow SNMP connections from this IPv4 address/subnet. Defaults to 127.0.0.1.
 # [*allow_ipv6_address*]
@@ -53,11 +57,13 @@
 #
 # BSD-license. See file LICENSE for details.
 #
-class postfix(
+class postfix
+(
     $serveradmin = $::serveradmin,
     $relayhost = '',
     $domain_mail_server = 'no',
     $inet_interfaces = 'loopback-only',
+    $smtp_host_lookup = 'dns, native',
     $allow_ipv4_address = '127.0.0.1',
     $allow_ipv6_address = '::1',
     $allow_ipv6_netmask = '128',
@@ -91,6 +97,7 @@ if hiera('manage_postfix', 'true') != 'false' {
             relayhost => $relayhost,
             domain_mail_server => $domain_mail_server,
             inet_interfaces => $inet_interfaces,
+            smtp_host_lookup => $smtp_host_lookup,
             allow_ipv4_address => $allow_ipv4_address,
             allow_ipv6_address => $allow_ipv6_address,
             allow_ipv6_netmask => $allow_ipv6_netmask,

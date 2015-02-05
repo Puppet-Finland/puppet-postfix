@@ -3,11 +3,13 @@
 #
 # Configures Postfix mail transfer agent
 #
-class postfix::config(
+class postfix::config
+(
     $serveradmin = 'none',
     $relayhost,
     $domain_mail_server,
     $inet_interfaces,
+    $smtp_host_lookup,
     $allow_ipv4_address,
     $allow_ipv6_address,
     $allow_ipv6_netmask

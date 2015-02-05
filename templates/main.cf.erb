@@ -38,4 +38,4 @@ recipient_delimiter = +
 inet_interfaces = <%= scope.lookupvar('postfix::config::inet_interfaces') %>
 
 smtpd_client_restrictions = permit_mynetworks, reject
-smtp_host_lookup = dns, native
+smtp_host_lookup = <%= smtp_host_lookup %>
