@@ -45,15 +45,7 @@ class postfix::params {
             $service_stop = "/usr/local/etc/rc.d/$service_name stop"
         }
         default: {
-            $package_name = 'postfix'
-            $main_cf = '/etc/postfix/main.cf'
-            $alias_maps = 'hash:/etc/aliases'
-            $alias_database = 'hash:/etc/aliases'
-            $daemon_directory = '/usr/lib/postfix'
-            $command_directory = '/usr/sbin'
-            $service_name = 'postfix'
-            $service_start = "/usr/sbin/service $service_name start"
-            $service_stop = "/usr/sbin/service $service_name stop"
+            fail("Unsupported OS: ${::osfamily}")
         }
     }
 }
