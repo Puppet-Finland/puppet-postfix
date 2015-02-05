@@ -1,0 +1,14 @@
+{
+  "name": "puppetfinland-postfix",
+  "version": "0.5.0",
+  "author": "Puppet-Finland team",
+  "license": "BSD license",
+  "summary": "Setup postfix",
+  "source": "https://github.com/Puppet-Finland/postfix.git",
+  "project_page": "https://github.com/Puppet-Finland/postfix",
+  "dependencies": [
+    { "name": "puppetfinland/monit", "version_requirement": ">= 0.5.0" },
+    { "name": "puppetfinland/packetfilter", "version_requirement": ">= 0.5.0" },
+    { "name": "puppetfinland/os", "version_requirement": ">= 0.5.0" }
+  ]
+}
