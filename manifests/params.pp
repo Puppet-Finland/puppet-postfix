@@ -15,14 +15,6 @@ class postfix::params {
             $daemon_directory = '/usr/libexec/postfix'
             $command_directory = '/usr/sbin'
             $service_name = 'postfix'
- 
-            if $::operatingsystem == 'Fedora' {
-                $service_start = "/usr/bin/systemctl start ${service_name}.service"
-                $service_stop = "/usr/bin/systemctl stop ${service_name}.service"
-            } else {
-                $service_start = "/sbin/service $service_name start"
-                $service_stop = "/sbin/service $service_name stop"
-            }
         }
         'Debian': {
             $package_name = 'postfix'
@@ -32,8 +24,6 @@ class postfix::params {
             $daemon_directory = '/usr/lib/postfix'
             $command_directory = '/usr/sbin'
             $service_name = 'postfix'
-            $service_start = "/usr/sbin/service $service_name start"
-            $service_stop = "/usr/sbin/service $service_name stop"
         }
         'FreeBSD': {
             $package_name = 'mail/postfix'
@@ -43,11 +33,19 @@ class postfix::params {
             $daemon_directory = '/usr/local/libexec/postfix'
             $command_directory = '/usr/local/sbin'
             $service_name = 'postfix'
-            $service_start = "/usr/local/etc/rc.d/$service_name start"
-            $service_stop = "/usr/local/etc/rc.d/$service_name stop"
         }
         default: {
             fail("Unsupported OS: ${::osfamily}")
         }
     }
+
+    if $::has_systemd == 'true' {
+        $service_start = "${::os::params::systemctl} start ${service_name}"
+        $service_stop = "${::os::params::systemctl} stop ${service_name}"
+    } else {
+        $service_start = "${::os::params::service_cmd} ${service_name} start"
+        $service_stop = "${::os::params::service_cmd} ${service_name} stop"
+    }
+
+
 }
