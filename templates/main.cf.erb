@@ -1,9 +1,9 @@
 ### THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
 
-alias_maps = <%= scope.lookupvar('postfix::params::alias_maps') %>
-alias_database = <%= scope.lookupvar('postfix::params::alias_database') %>
-daemon_directory = <%= scope.lookupvar('postfix::params::daemon_directory') %>
-command_directory = <%= scope.lookupvar('postfix::params::command_directory') %>
+alias_maps = <%= scope['postfix::params::alias_maps'] %>
+alias_database = <%= scope['postfix::params::alias_database'] %>
+daemon_directory = <%= scope['postfix::params::daemon_directory'] %>
+command_directory = <%= scope['postfix::params::command_directory'] %>
 
 smtpd_banner = $myhostname ESMTP $mail_name (<%= operatingsystem %>)
 biff = no
@@ -30,12 +30,13 @@ mydestination = <%= fqdn %> localhost.<%= domain %> localhost <%= domain %>
 mydestination = <%= fqdn %> localhost.<%= domain %> localhost
 <% end %>
 
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 <%= scope.lookupvar('postfix::config::allow_ipv4_address') %> [<%= scope.lookupvar('postfix::config::allow_ipv6_address') %>]/<%= scope.lookupvar('postfix::config::allow_ipv6_netmask') %>
-relayhost = <%= scope.lookupvar('postfix::config::relayhost') %>
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 <%= @allow_ipv4_address %> [<%= @allow_ipv6_address %>]/<%= @allow_ipv6_netmask %>
+relayhost = <% if @relayhost %><%= @relayhost %><% end -%>
+
 relay_domains =
 mailbox_size_limit = 0
 recipient_delimiter = +
-inet_interfaces = <%= scope.lookupvar('postfix::config::inet_interfaces') %>
+inet_interfaces = <%= @inet_interfaces %>
 
 smtpd_client_restrictions = permit_mynetworks, reject
-smtp_host_lookup = <%= smtp_host_lookup %>
+smtp_host_lookup = <%= @smtp_host_lookup %>

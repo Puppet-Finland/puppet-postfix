@@ -6,8 +6,8 @@
 class postfix::service inherits postfix::params {
 
     service { 'postfix':
-        name => 'postfix',
-        enable => true,
-        require => Class['postfix::install'],
+        name    => 'postfix',
+        enable  => true,
+        require => Class['::postfix::install'],
     }
 }

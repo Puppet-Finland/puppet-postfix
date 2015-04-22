@@ -5,12 +5,15 @@
 #
 # == Parameters
 #
+# [*manage*]
+#  Whether to manage postfix with Puppet or not. Valid values are 'yes'
+#  (default) and 'no'.
 # [*serveradmin*]
-#   An email address where mail for root should be sent to. Defaults to the top-scope
-#   variable $::serveradmin.
+#   An email address where mail for root should be sent to. Defaults to the 
+#   top-scope variable $::serveradmin.
 # [*relayhost*]
-#   The host used for relaying mail. Defaults to '' which means that Postfix 
-#   will try to send mail directly. 
+#   The host used for relaying mail. Defaults to undef which means that Postfix
+#   will try to send mail directly.
 # [*domain_mail_server*]
 #   Selects whether to configure this postfix instance to receive mail for the
 #   entire domain, or only for itself. Defaults to 'no'.
@@ -59,8 +62,9 @@
 #
 class postfix
 (
+    $manage = 'yes',
     $serveradmin = $::serveradmin,
-    $relayhost = '',
+    $relayhost = undef,
     $domain_mail_server = 'no',
     $inet_interfaces = 'loopback-only',
     $smtp_host_lookup = 'dns, native',
@@ -71,55 +75,38 @@ class postfix
 )
 {
 
-# Rationale for this is explained in init.pp of the sshd module
-if hiera('manage_postfix', 'true') != 'false' {
+if $manage == 'yes' {
 
-    # SuSE has a very different idea of how we configure postfix, so for the 
-    # time being it's only partially supported.
-    if $::operatingsystem == 'OpenSuSE' {
-        include postfix::install
-        include postfix::service
+    include ::postfix::install
 
-        if tagged('monit') {
-            class { 'postfix::monit':
-                monitor_email => $monitor_email,
-            }
+    class {'::postfix::config':
+        serveradmin        => $serveradmin,
+        relayhost          => $relayhost,
+        domain_mail_server => $domain_mail_server,
+        inet_interfaces    => $inet_interfaces,
+        smtp_host_lookup   => $smtp_host_lookup,
+        allow_ipv4_address => $allow_ipv4_address,
+        allow_ipv6_address => $allow_ipv6_address,
+        allow_ipv6_netmask => $allow_ipv6_netmask,
+    }
+
+    include ::postfix::service
+
+    # FreeBSD requires additional configuration
+    if $::operatingsystem == 'FreeBSD' {
+        include ::postfix::config::freebsd
+    }
+
+    if tagged('packetfilter') {
+        class {'::postfix::packetfilter':
+            ipv4_address => $allow_ipv4_address,
+            ipv6_address => "${allow_ipv6_address}/${allow_ipv6_netmask}",
         }
     }
-    elsif $::operatingsystem == 'SLES' {
-        include postfix::install
-    }
-    else {
-        include postfix::install
 
-        class {'postfix::config':
-            serveradmin => $serveradmin,
-            relayhost => $relayhost,
-            domain_mail_server => $domain_mail_server,
-            inet_interfaces => $inet_interfaces,
-            smtp_host_lookup => $smtp_host_lookup,
-            allow_ipv4_address => $allow_ipv4_address,
-            allow_ipv6_address => $allow_ipv6_address,
-            allow_ipv6_netmask => $allow_ipv6_netmask,
-        }
-        include postfix::service
-
-        # FreeBSD requires additional configuration
-        if $::operatingsystem == 'FreeBSD' {
-            include postfix::config::freebsd
-        }
-
-        if tagged('packetfilter') {
-            class {'postfix::packetfilter':
-                ipv4_address => $allow_ipv4_address,
-                ipv6_address => "$allow_ipv6_address/$allow_ipv6_netmask",
-            }
-        }
-
-        if tagged('monit') {
-            class { 'postfix::monit':
-                monitor_email => $monitor_email,
-            }
+    if tagged('monit') {
+        class { '::postfix::monit':
+            monitor_email => $monitor_email,
         }
     }
 }

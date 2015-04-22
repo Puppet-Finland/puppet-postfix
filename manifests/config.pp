@@ -17,46 +17,47 @@ class postfix::config
 ) inherits postfix::params
 {
 
-    include postfix::params
-
     file { 'postfix-main.cf':
-        name => "${::postfix::params::main_cf}",
+        ensure  => present,
+        name    => $::postfix::params::main_cf,
         content => template('postfix/main.cf.erb'),
-        ensure => present,
-        owner => root,
-        group => "${::os::params::admingroup}",
-        mode  => 644,
-        require => Class['postfix::install'],
-        notify => Class['postfix::service'],
+        owner   => $::os::params::adminuser,
+        group   => $::os::params::admingroup,
+        mode    => '0644',
+        require => Class['::postfix::install'],
+        notify  => Class['::postfix::service'],
     }
 
     # Set default values on all mailalias-resources and
     # define newaliases-command
-    Mailalias <| |> {
+    Mailalias <| tag == 'postfix-mailalias' |> {
         target  => '/etc/aliases',
         require => Class['postfix::install'],
         notify  => Exec['postfix-newaliases'],
     }
     exec { 'postfix-newaliases':
-        command => 'newaliases',
-        cwd => '/tmp',
-        path => '/usr/bin',
+        command     => 'newaliases',
+        cwd         => '/tmp',
+        path        => '/usr/bin',
         refreshonly => true,
     }
 
     # set some default aliases
     mailalias {'postmaster':
         recipient => 'root',
+        tag       => 'postfix-mailalias',
     }
     mailalias {'webmaster':
         recipient => 'root',
+        tag       => 'postfix-mailalias',
     }
     # Set root email addess, if given
     if ($serveradmin != 'none') {
         mailalias {"root to ${serveradmin}":
+            ensure    => present,
             name      => 'root',
             recipient => $serveradmin,
-            ensure    => present,
+            tag       => 'postfix-mailalias',
         }
     }
 }

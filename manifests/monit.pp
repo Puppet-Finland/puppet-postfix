@@ -3,7 +3,8 @@
 #
 # Setups monit rules for postfix
 #
-class postfix::monit(
+class postfix::monit
+(
     $monitor_email
 
 ) inherits postfix::params

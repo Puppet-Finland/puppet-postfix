@@ -7,20 +7,18 @@
 class postfix::config::freebsd inherits postfix::params
 {
 
-    include os::params
-
     file { 'postfix-mailer.conf':
-        name => '/etc/mail/mailer.conf',
-        ensure => present,
+        ensure  => present,
+        name    => '/etc/mail/mailer.conf',
         content => template('postfix/mailer.conf.erb'),
-        owner => root,
-        group => "${::os::params::admingroup}",
-        mode => 644,
+        owner   => $::os::params::adminuser,
+        group   => $::os::params::admingroup,
+        mode    => '0644',
     }
 
     # Disable sendmail service
     service { 'postfix-sendmail':
-        name => 'sendmail',
+        name   => 'sendmail',
         enable => false,
     }
 }

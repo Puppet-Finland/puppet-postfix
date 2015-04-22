@@ -4,7 +4,7 @@
 # Defines some variables based on the operating system
 class postfix::params {
 
-    include os::params
+    include ::os::params
 
     case $::osfamily {
         'RedHat': {
@@ -39,7 +39,7 @@ class postfix::params {
         }
     }
 
-    if $::has_systemd == 'true' {
+    if str2bool($::has_systemd) {
         $service_start = "${::os::params::systemctl} start ${service_name}"
         $service_stop = "${::os::params::systemctl} stop ${service_name}"
     } else {

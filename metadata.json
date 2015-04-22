@@ -1,6 +1,6 @@
 {
   "name": "puppetfinland-postfix",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": "Puppet-Finland team",
   "license": "BSD license",
   "summary": "Setup postfix",

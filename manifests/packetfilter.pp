@@ -14,21 +14,21 @@ class postfix::packetfilter
     # IPv4 rules
     firewall { '014 ipv4 accept smtp port':
         provider => 'iptables',
-        chain => 'INPUT',
-        proto => 'tcp',
-        port => 25,
-        source => "$ipv4_address",
-        action => 'accept',
+        chain    => 'INPUT',
+        proto    => 'tcp',
+        port     => 25,
+        source   => $ipv4_address,
+        action   => 'accept',
     }
 
     # IPv6 rules
     firewall { '014 ipv6 accept smtp port':
         provider => 'ip6tables',
-        chain => 'INPUT',
-        proto => 'tcp',
-        port => 25,
-        source => "$ipv6_address",
-        action => 'accept',
+        chain    => 'INPUT',
+        proto    => 'tcp',
+        port     => 25,
+        source   => $ipv6_address,
+        action   => 'accept',
     }
 
 }
