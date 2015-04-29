@@ -64,6 +64,7 @@ class postfix
 (
     $manage = 'yes',
     $serveradmin = $::serveradmin,
+    $mailaliases = {},
     $relayhost = undef,
     $domain_mail_server = 'no',
     $inet_interfaces = 'loopback-only',
@@ -81,6 +82,7 @@ if $manage == 'yes' {
 
     class {'::postfix::config':
         serveradmin        => $serveradmin,
+        mailaliases        => $mailaliases,
         relayhost          => $relayhost,
         domain_mail_server => $domain_mail_server,
         inet_interfaces    => $inet_interfaces,

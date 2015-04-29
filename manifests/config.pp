@@ -6,6 +6,7 @@
 class postfix::config
 (
     $serveradmin = 'none',
+    $mailaliases,
     $relayhost,
     $domain_mail_server,
     $inet_interfaces,
@@ -28,8 +29,8 @@ class postfix::config
         notify  => Class['::postfix::service'],
     }
 
-    # Set default values on all mailalias-resources and
-    # define newaliases-command
+    # Set default values on postfix-mailalias resources and define 
+    # newaliases-command
     Mailalias <| tag == 'postfix-mailalias' |> {
         target  => '/etc/aliases',
         require => Class['postfix::install'],
@@ -42,22 +43,11 @@ class postfix::config
         refreshonly => true,
     }
 
-    # set some default aliases
-    mailalias {'postmaster':
-        recipient => 'root',
-        tag       => 'postfix-mailalias',
-    }
-    mailalias {'webmaster':
-        recipient => 'root',
-        tag       => 'postfix-mailalias',
-    }
-    # Set root email addess, if given
-    if ($serveradmin != 'none') {
-        mailalias {"root to ${serveradmin}":
-            ensure    => present,
-            name      => 'root',
-            recipient => $serveradmin,
-            tag       => 'postfix-mailalias',
-        }
-    }
+    # Create standard mailaliases
+    postfix::mailalias { 'postmaster':             recipient => $::os::params::adminuser, }
+    postfix::mailalias { 'webmaster':              recipient => $::os::params::adminuser, }
+    postfix::mailalias { $::os::params::adminuser: recipient => $serveradmin, }
+
+    # Create additional mailaliases
+    create_resources('postfix::mailalias', $mailaliases)
 }
