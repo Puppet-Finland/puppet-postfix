@@ -5,7 +5,7 @@ alias_database = <%= scope['postfix::params::alias_database'] %>
 daemon_directory = <%= scope['postfix::params::daemon_directory'] %>
 command_directory = <%= scope['postfix::params::command_directory'] %>
 
-smtpd_banner = $myhostname ESMTP $mail_name (<%= operatingsystem %>)
+smtpd_banner = $myhostname ESMTP $mail_name (<%= @operatingsystem %>)
 biff = no
 append_dot_mydomain = no
 readme_directory = no
@@ -18,16 +18,16 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 
 # Please make sure $::fqdn fact exists. If necessary, add an entry to to 
 # /etc/hosts.
-myhostname = <%= fqdn %>
-myorigin = <%= fqdn %>
+myhostname = <%= @fqdn %>
+myorigin = <%= @fqdn %>
 
-<% if domain_mail_server == "yes" %>
+<% if @domain_mail_server == "yes" %>
 # This mail server receives mail for the whole domain
-mydomain = <%= domain %>
-mydestination = <%= fqdn %> localhost.<%= domain %> localhost <%= domain %>
+mydomain = <%= @domain %>
+mydestination = <%= @fqdn %> localhost.<%= @domain %> localhost <%= @domain %>
 <% else %>
 # This mail server receives mail only for itself
-mydestination = <%= fqdn %> localhost.<%= domain %> localhost
+mydestination = <%= @fqdn %> localhost.<%= @domain %> localhost
 <% end %>
 
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 <%= @allow_ipv4_address %> [<%= @allow_ipv6_address %>]/<%= @allow_ipv6_netmask %>
