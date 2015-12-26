@@ -12,8 +12,17 @@
 #   An email address where mail for root should be sent to. Defaults to the 
 #   top-scope variable $::serveradmin.
 # [*relayhost*]
-#   The host used for relaying mail. Defaults to undef which means that Postfix
-#   will try to send mail directly.
+#   The host used for relaying mail. Defaults to undef which means that Postfix 
+#   will try to send mail directly. An optional port can be added after the 
+#   hostname. Example: mail.domain.com:587
+# [*smtp_username*]
+#   Username to use for authenticating with the relayhost. Undef by default. 
+#   This should be given if the receiving SMTP server(s) block unauthenticated 
+#   SMTP connections. Encrypted connections are assumed. Note that this should 
+#   only be set if using a relayhost - local postfix instances as configured by 
+#   this module do not support or need SMTP authentication.
+# [*smtp_password*]
+#   Password for the SMTP user.
 # [*domain_mail_server*]
 #   Selects whether to configure this postfix instance to receive mail for the
 #   entire domain, or only for itself. Defaults to 'no'.
@@ -66,6 +75,8 @@ class postfix
     $serveradmin = $::serveradmin,
     $mailaliases = {},
     $relayhost = undef,
+    $smtp_username = undef,
+    $smtp_password = undef,
     $domain_mail_server = 'no',
     $inet_interfaces = 'loopback-only',
     $smtp_host_lookup = 'dns, native',
@@ -84,6 +95,8 @@ if $manage == 'yes' {
         serveradmin        => $serveradmin,
         mailaliases        => $mailaliases,
         relayhost          => $relayhost,
+        smtp_username      => $smtp_username,
+        smtp_password      => $smtp_password,
         domain_mail_server => $domain_mail_server,
         inet_interfaces    => $inet_interfaces,
         smtp_host_lookup   => $smtp_host_lookup,

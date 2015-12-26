@@ -10,6 +10,7 @@ class postfix::params {
         'RedHat': {
             $package_name = 'postfix'
             $main_cf = '/etc/postfix/main.cf'
+            $sasl_passwd = '/etc/postfix/sasl_passwd'
             $alias_maps = 'hash:/etc/aliases'
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/libexec/postfix'
@@ -19,6 +20,7 @@ class postfix::params {
         'Debian': {
             $package_name = 'postfix'
             $main_cf = '/etc/postfix/main.cf'
+            $sasl_passwd = '/etc/postfix/sasl_passwd'
             $alias_maps = 'hash:/etc/aliases'
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/lib/postfix'
@@ -28,6 +30,7 @@ class postfix::params {
         'FreeBSD': {
             $package_name = 'mail/postfix'
             $main_cf = '/usr/local/etc/postfix/main.cf'
+            $sasl_passwd = '/usr/local/etc/postfix/sasl_passwd'
             $alias_maps = 'hash:/etc/aliases'
             $alias_database = 'hash:/etc/aliases'
             $daemon_directory = '/usr/local/libexec/postfix'

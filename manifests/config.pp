@@ -8,6 +8,8 @@ class postfix::config
     $serveradmin = 'none',
     $mailaliases,
     $relayhost,
+    $smtp_username,
+    $smtp_password,
     $domain_mail_server,
     $inet_interfaces,
     $smtp_host_lookup,
@@ -17,6 +19,36 @@ class postfix::config
 
 ) inherits postfix::params
 {
+
+    # Configure SMTP authentication, if requested.
+    if $smtp_username {
+        validate_string($smtp_username)
+        validate_string($smtp_password)
+
+        file { 'postfix-sasl_passwd':
+            ensure => file,
+            name   => $::postfix::params::sasl_passwd,
+            owner  => $::os::params::adminuser,
+            group  => $::os::params::admingroup,
+            mode   => '0600',
+        }
+
+        file_line { "postfix-${relayhost}-${smtp_username}":
+            ensure  => present,
+            path    => $::postfix::params::sasl_passwd,
+            line    => "${relayhost} ${smtp_username}:${smtp_password}",
+            require => File['postfix-sasl_passwd'],
+            notify  => Exec['postfix-update-sasl_passwd'],
+        }
+
+        exec { 'postfix-update-sasl_passwd':
+            command     => "postmap ${::postfix::params::sasl_passwd}",
+            path        => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin' ],
+            refreshonly => true,
+            user        => $::os::params::adminuser,
+            require     => File_line["postfix-${relayhost}-${smtp_username}"],
+        }
+    }
 
     file { 'postfix-main.cf':
         ensure  => present,

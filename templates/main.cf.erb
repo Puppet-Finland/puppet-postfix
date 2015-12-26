@@ -40,3 +40,9 @@ inet_interfaces = <%= @inet_interfaces %>
 
 smtpd_client_restrictions = permit_mynetworks, reject
 smtp_host_lookup = <%= @smtp_host_lookup %>
+<% if @smtp_username -%>
+smtp_sasl_auth_enable = yes
+smtp_tls_security_level = encrypt
+smtp_sasl_tls_security_options = noanonymous
+smtp_sasl_password_maps = hash:<%= scope['postfix::params::sasl_passwd'] %>
+<% end -%>
