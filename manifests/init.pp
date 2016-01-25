@@ -74,6 +74,7 @@ class postfix
     $manage = 'yes',
     $serveradmin = $::serveradmin,
     $mailaliases = {},
+    $generic_mappings = {},
     $relayhost = undef,
     $smtp_username = undef,
     $smtp_password = undef,
@@ -94,6 +95,7 @@ if $manage == 'yes' {
     class {'::postfix::config':
         serveradmin        => $serveradmin,
         mailaliases        => $mailaliases,
+        generic_mappings   => $generic_mappings,
         relayhost          => $relayhost,
         smtp_username      => $smtp_username,
         smtp_password      => $smtp_password,

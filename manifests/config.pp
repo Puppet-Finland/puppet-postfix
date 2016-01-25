@@ -7,6 +7,7 @@ class postfix::config
 (
     $serveradmin = 'none',
     $mailaliases,
+    $generic_mappings,
     $relayhost,
     $smtp_username,
     $smtp_password,
@@ -25,7 +26,7 @@ class postfix::config
         validate_string($smtp_username)
         validate_string($smtp_password)
 
-        file { 'postfix-sasl_passwd':
+        file { 'postfix-sasl_passwd':
             ensure => file,
             name   => $::postfix::params::sasl_passwd,
             owner  => $::os::params::adminuser,
@@ -75,11 +76,27 @@ class postfix::config
         refreshonly => true,
     }
 
+    file { 'postfix-generic':
+        ensure => file,
+        name   => $::postfix::params::smtp_generic_maps_file,
+        owner  => $::os::params::adminuser,
+        group  => $::os::params::admingroup,
+        mode   => '0644',
+    }
+
+    exec { 'postfix-postmap-generic':
+        command     => "postmap ${::postfix::params::smtp_generic_maps}",
+        cwd         => '/tmp',
+        path        => ['/usr/sbin', '/usr/local/sbin'],
+        refreshonly => true,
+    }
+
     # Create standard mailaliases
     postfix::mailalias { 'postmaster':             recipient => $::os::params::adminuser, }
     postfix::mailalias { 'webmaster':              recipient => $::os::params::adminuser, }
     postfix::mailalias { $::os::params::adminuser: recipient => $serveradmin, }
 
-    # Create additional mailaliases
+    # Create additional mailaliases and generic mappings
     create_resources('postfix::mailalias', $mailaliases)
+    create_resources('postfix::generic_mapping', $generic_mappings)
 }

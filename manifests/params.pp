@@ -13,6 +13,8 @@ class postfix::params {
             $sasl_passwd = '/etc/postfix/sasl_passwd'
             $alias_maps = 'hash:/etc/aliases'
             $alias_database = 'hash:/etc/aliases'
+            $smtp_generic_maps_file = '/etc/postfix/generic'
+            $smtp_generic_maps = "hash:${smtp_generic_maps_file}"
             $daemon_directory = '/usr/libexec/postfix'
             $command_directory = '/usr/sbin'
             $service_name = 'postfix'
@@ -23,6 +25,8 @@ class postfix::params {
             $sasl_passwd = '/etc/postfix/sasl_passwd'
             $alias_maps = 'hash:/etc/aliases'
             $alias_database = 'hash:/etc/aliases'
+            $smtp_generic_maps_file = '/etc/postfix/generic'
+            $smtp_generic_maps = "hash:${smtp_generic_maps_file}"
             $daemon_directory = '/usr/lib/postfix'
             $command_directory = '/usr/sbin'
             $service_name = 'postfix'
@@ -33,6 +37,8 @@ class postfix::params {
             $sasl_passwd = '/usr/local/etc/postfix/sasl_passwd'
             $alias_maps = 'hash:/etc/aliases'
             $alias_database = 'hash:/etc/aliases'
+            $smtp_generic_maps_file = '/usr/local/etc/postfix/generic'
+            $smtp_generic_maps = "hash:${smtp_generic_maps_file}"
             $daemon_directory = '/usr/local/libexec/postfix'
             $command_directory = '/usr/local/sbin'
             $service_name = 'postfix'
