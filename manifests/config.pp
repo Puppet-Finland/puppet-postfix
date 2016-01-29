@@ -51,6 +51,28 @@ class postfix::config
         }
     }
 
+    if ! empty($generic_mappings) {
+
+        $smtp_generic_maps_line = "smtp_generic_maps = ${::postfix::params::smtp_generic_maps}"
+
+        file { 'postfix-generic':
+            ensure => file,
+            name   => $::postfix::params::smtp_generic_maps_file,
+            owner  => $::os::params::adminuser,
+            group  => $::os::params::admingroup,
+            mode   => '0644',
+        }
+
+        exec { 'postfix-postmap-generic':
+            command     => "postmap ${::postfix::params::smtp_generic_maps}",
+            cwd         => '/tmp',
+            path        => ['/usr/sbin', '/usr/local/sbin'],
+            refreshonly => true,
+        }
+
+        create_resources('postfix::generic_mapping', $generic_mappings)
+    }
+
     file { 'postfix-main.cf':
         ensure  => present,
         name    => $::postfix::params::main_cf,
@@ -76,27 +98,11 @@ class postfix::config
         refreshonly => true,
     }
 
-    file { 'postfix-generic':
-        ensure => file,
-        name   => $::postfix::params::smtp_generic_maps_file,
-        owner  => $::os::params::adminuser,
-        group  => $::os::params::admingroup,
-        mode   => '0644',
-    }
-
-    exec { 'postfix-postmap-generic':
-        command     => "postmap ${::postfix::params::smtp_generic_maps}",
-        cwd         => '/tmp',
-        path        => ['/usr/sbin', '/usr/local/sbin'],
-        refreshonly => true,
-    }
-
     # Create standard mailaliases
     postfix::mailalias { 'postmaster':             recipient => $::os::params::adminuser, }
     postfix::mailalias { 'webmaster':              recipient => $::os::params::adminuser, }
     postfix::mailalias { $::os::params::adminuser: recipient => $serveradmin, }
 
-    # Create additional mailaliases and generic mappings
+    # Create additional mailaliases
     create_resources('postfix::mailalias', $mailaliases)
-    create_resources('postfix::generic_mapping', $generic_mappings)
 }
