@@ -11,12 +11,6 @@ biff = no
 append_dot_mydomain = no
 readme_directory = no
 
-smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
-smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
-smtpd_use_tls=yes
-smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
-smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
-
 # Please make sure $::fqdn fact exists. If necessary, add an entry to to 
 # /etc/hosts.
 myhostname = <%= @fqdn %>
@@ -47,3 +41,12 @@ smtp_tls_security_level = encrypt
 smtp_sasl_tls_security_options = noanonymous
 smtp_sasl_password_maps = hash:<%= scope['postfix::params::sasl_passwd'] %>
 <% end -%>
+
+<% if !@options.empty? -%> 
+# additional options from hiera (postfix::options)"
+<%    @options.each{ |key,value| -%>
+<%= key %> = <%= value %>
+<%   }
+end
+-%>
+
