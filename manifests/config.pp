@@ -72,7 +72,7 @@ class postfix::config
 
         create_resources('postfix::generic_mapping', $generic_mappings)
     }
-
+    $options = hiera('postfix::options')
     file { 'postfix-main.cf':
         ensure  => present,
         name    => $::postfix::params::main_cf,
