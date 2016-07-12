@@ -73,6 +73,13 @@ class postfix::config
         create_resources('postfix::generic_mapping', $generic_mappings)
     }
 
+    # Postfix on Ubuntu 16.04 fails to start if daemon_directory is defined. 
+    # This is related to changes between postfix 2.x and 3.x
+    $daemon_directory_line = $::lsbdistcodename ? {
+        'xenial' => undef,
+        default  => "daemon_directory = ${::postfix::params::daemon_directory}",
+    }
+
     file { 'postfix-main.cf':
         ensure  => present,
         name    => $::postfix::params::main_cf,

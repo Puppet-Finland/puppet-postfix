@@ -3,7 +3,7 @@
 alias_maps = <%= scope['postfix::params::alias_maps'] %>
 alias_database = <%= scope['postfix::params::alias_database'] %>
 <%= scope['postfix::config::smtp_generic_maps_line'] %>
-daemon_directory = <%= scope['postfix::params::daemon_directory'] %>
+<%= @daemon_directory_line %>
 command_directory = <%= scope['postfix::params::command_directory'] %>
 
 smtpd_banner = $myhostname ESMTP $mail_name (<%= @operatingsystem %>)
