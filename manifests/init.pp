@@ -6,8 +6,13 @@
 # == Parameters
 #
 # [*manage*]
-#  Whether to manage postfix with Puppet or not. Valid values are true
-#  (default) and false.
+#   Whether to manage postfix with Puppet or not. Valid values are true
+#   (default) and false.
+# [*manage_packetfilter*]
+#   Manage packet filtering rules for postfix. Valid values are true (default) 
+#   and false.
+# [*manage_monit*]
+#   Monitor postfix with monit. Valid values are true (default) and false.
 # [*serveradmin*]
 #   An email address where mail for root should be sent to. Defaults to the 
 #   top-scope variable $::serveradmin.
@@ -61,19 +66,21 @@
 class postfix
 (
     Boolean $manage = true,
-    $serveradmin = $::serveradmin,
-    $mailaliases = {},
-    $generic_mappings = {},
-    $relayhost = undef,
-    $smtp_username = undef,
-    $smtp_password = undef,
-    $domain_mail_server = 'no',
-    $inet_interfaces = 'loopback-only',
-    $smtp_host_lookup = 'dns, native',
-    $allow_ipv4_address = '127.0.0.1',
-    $allow_ipv6_address = '::1',
-    $allow_ipv6_netmask = '128',
-    $monitor_email = $::servermonitor
+    Boolean $manage_packetfilter = true,
+    Boolean $manage_monit = true,
+            $serveradmin = $::serveradmin,
+            $mailaliases = {},
+            $generic_mappings = {},
+            $relayhost = undef,
+            $smtp_username = undef,
+            $smtp_password = undef,
+            $domain_mail_server = 'no',
+            $inet_interfaces = 'loopback-only',
+            $smtp_host_lookup = 'dns, native',
+            $allow_ipv4_address = '127.0.0.1',
+            $allow_ipv6_address = '::1',
+            $allow_ipv6_netmask = '128',
+            $monitor_email = $::servermonitor
 )
 {
 
@@ -103,14 +110,14 @@ if $manage {
         include ::postfix::config::freebsd
     }
 
-    if tagged('packetfilter') {
+    if $manage_packetfilter {
         class {'::postfix::packetfilter':
             ipv4_address => $allow_ipv4_address,
             ipv6_address => "${allow_ipv6_address}/${allow_ipv6_netmask}",
         }
     }
 
-    if tagged('monit') {
+    if $manage_monit {
         class { '::postfix::monit':
             monitor_email => $monitor_email,
         }

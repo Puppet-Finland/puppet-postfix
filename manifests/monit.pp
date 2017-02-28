@@ -9,8 +9,9 @@ class postfix::monit
 
 ) inherits postfix::params
 {
-    monit::fragment { 'postfix-postfix.monit':
+    @monit::fragment { 'postfix-postfix.monit':
         basename   => 'postfix',
         modulename => 'postfix',
+        tag        => 'default',
     }
 }
