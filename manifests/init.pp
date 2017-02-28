@@ -6,8 +6,8 @@
 # == Parameters
 #
 # [*manage*]
-#  Whether to manage postfix with Puppet or not. Valid values are 'yes'
-#  (default) and 'no'.
+#  Whether to manage postfix with Puppet or not. Valid values are true
+#  (default) and false.
 # [*serveradmin*]
 #   An email address where mail for root should be sent to. Defaults to the 
 #   top-scope variable $::serveradmin.
@@ -46,17 +46,6 @@
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to top scope variable $::servermonitor.
 #
-# == Examples
-#
-#   class {'postfix':
-#       serveradmin => 'my.admin.email@domain.tld',
-#       domain_mail_server => 'yes',
-#       inet_interfaces => 'all'
-#       allow_ipv4_address => '192.168.0.0/24',
-#       allow_ipv6_address => '::1',
-#       allow_ipv6_netmask => '128'
-#   }
-#
 # == Authors
 #
 # Samuli Seppänen <samuli.seppanen@gmail.com>
@@ -71,7 +60,7 @@
 #
 class postfix
 (
-    $manage = 'yes',
+    Boolean $manage = true,
     $serveradmin = $::serveradmin,
     $mailaliases = {},
     $generic_mappings = {},
@@ -88,7 +77,7 @@ class postfix
 )
 {
 
-if $manage == 'yes' {
+if $manage {
 
     include ::postfix::install
 
