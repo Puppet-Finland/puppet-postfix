@@ -25,15 +25,11 @@
 #
 define postfix::generic_mapping
 (
-    $pattern = $title,
-    $result = $::postfix::config::smtp_username,
-    $ensure = 'present'
+    String                   $pattern = $title,
+    String                   $result = $::postfix::config::smtp_username,
+    Enum['present','absent'] $ensure = 'present'
 )
 {
-    validate_re("${ensure}", '^(present|absent)$')
-    validate_string($pattern)
-    validate_string($result)
-
     include ::postfix::params
 
     file_line { "postfix-${title}":
