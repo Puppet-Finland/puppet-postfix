@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Puppet-Finland/puppet-postfix.svg?branch=master)](https://travis-ci.org/Puppet-Finland/puppet-postfix)
+
 # postfix
 
 A general-purpose postfix module for Puppet. Includes support for monit
