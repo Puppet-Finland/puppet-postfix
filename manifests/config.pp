@@ -5,7 +5,6 @@
 #
 class postfix::config
 (
-    $serveradmin = 'none',
     $mailaliases,
     $generic_mappings,
     $relayhost,
@@ -16,7 +15,8 @@ class postfix::config
     $smtp_host_lookup,
     $allow_ipv4_address,
     $allow_ipv6_address,
-    $allow_ipv6_netmask
+    $allow_ipv6_netmask,
+    $serveradmin = 'none'
 
 ) inherits postfix::params
 {
