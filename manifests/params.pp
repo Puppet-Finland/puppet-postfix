@@ -31,8 +31,8 @@ class postfix::params {
             $service_name = 'postfix'
 
             $daemon_directory = $::lsbdistcodename ? {
-                'stretch' => '/usr/lib/postfix/sbin',
-                default   => '/usr/lib/postfix',
+                /(stretch|bionic)/ => '/usr/lib/postfix/sbin',
+                default            => '/usr/lib/postfix',
             }
 
         }
