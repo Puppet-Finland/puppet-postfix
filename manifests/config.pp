@@ -16,6 +16,7 @@ class postfix::config
     $allow_ipv4_address,
     $allow_ipv6_address,
     $allow_ipv6_netmask,
+    $origin,
     $serveradmin = 'none'
 
 ) inherits postfix::params
