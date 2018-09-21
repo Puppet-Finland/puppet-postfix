@@ -20,7 +20,7 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 # Please make sure $::fqdn fact exists. If necessary, add an entry to to 
 # /etc/hosts.
 myhostname = <%= @fqdn %>
-myorigin = <%= @fqdn %>
+myorigin = <%= @origin %>
 
 <% if @domain_mail_server == "yes" %>
 # This mail server receives mail for the whole domain
