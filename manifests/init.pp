@@ -13,6 +13,12 @@
 #   and false.
 # [*manage_monit*]
 #   Monitor postfix with monit. Valid values are true (default) and false.
+# [*masquerade_domains*]
+#   List of domain names. Postfix tries to masquerade a domain,
+#   it processes the list from left to right,
+#   and processing stops at the first match.
+# [*masquerade_exceptions*]
+#   List of user names that should not be subjected to address masquerading.
 # [*serveradmin*]
 #   An email address where mail for root should be sent to. Defaults to the 
 #   top-scope variable $::serveradmin.
@@ -71,6 +77,8 @@ class postfix
     Boolean $manage = true,
     Boolean $manage_packetfilter = true,
     Boolean $manage_monit = true,
+    Array[Stdlib::Fqdn] $masquerade_domains = [],
+    Array[String] $masquerade_exceptions = [],
             $serveradmin = $::serveradmin,
             $mailaliases = {},
             $generic_mappings = {},
@@ -93,19 +101,21 @@ if $manage {
     include ::postfix::install
 
     class {'::postfix::config':
-        serveradmin        => $serveradmin,
-        mailaliases        => $mailaliases,
-        generic_mappings   => $generic_mappings,
-        relayhost          => $relayhost,
-        smtp_username      => $smtp_username,
-        smtp_password      => $smtp_password,
-        domain_mail_server => $domain_mail_server,
-        inet_interfaces    => $inet_interfaces,
-        smtp_host_lookup   => $smtp_host_lookup,
-        allow_ipv4_address => $allow_ipv4_address,
-        allow_ipv6_address => $allow_ipv6_address,
-        allow_ipv6_netmask => $allow_ipv6_netmask,
-        origin             => $origin,
+        serveradmin           => $serveradmin,
+        mailaliases           => $mailaliases,
+        generic_mappings      => $generic_mappings,
+        relayhost             => $relayhost,
+        smtp_username         => $smtp_username,
+        smtp_password         => $smtp_password,
+        domain_mail_server    => $domain_mail_server,
+        inet_interfaces       => $inet_interfaces,
+        smtp_host_lookup      => $smtp_host_lookup,
+        allow_ipv4_address    => $allow_ipv4_address,
+        allow_ipv6_address    => $allow_ipv6_address,
+        allow_ipv6_netmask    => $allow_ipv6_netmask,
+        origin                => $origin,
+        masquerade_domains    => $masquerade_domains,
+        masquerade_exceptions => $masquerade_exceptions,
     }
 
     include ::postfix::service
