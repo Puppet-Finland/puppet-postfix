@@ -31,6 +31,13 @@ mydestination = <%= @fqdn %> localhost.<%= @domain %> localhost <%= @domain %>
 mydestination = <%= @fqdn %> localhost.<%= @domain %> localhost
 <% end %>
 
+<% if @masquerade_domains.length > 0 -%>
+masquerade_domains = <%= @masquerade_domains.join(' ') %>
+<% end -%>
+<% if @masquerade_exceptions.length > 0 -%>
+masquerade_exceptions = <%= @masquerade_exceptions.join(' ') %>
+<% end -%>
+
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 <%= @allow_ipv4_address %> [<%= @allow_ipv6_address %>]/<%= @allow_ipv6_netmask %>
 relayhost = <% if @relayhost %><%= @relayhost %><% end -%>
 
