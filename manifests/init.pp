@@ -50,6 +50,9 @@
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to top scope variable $::servermonitor.
+# [*origin*]
+#   The domain name that locally-posted mail appears to come from, and that
+#   locally posted mail is delivered to. The default, $::fqdn, is adequate for small sites.
 #
 # == Authors
 #
@@ -80,7 +83,8 @@ class postfix
             $allow_ipv4_address = '127.0.0.1',
             $allow_ipv6_address = '::1',
             $allow_ipv6_netmask = '128',
-            $monitor_email = $::servermonitor
+            $monitor_email = $::servermonitor,
+            $origin = $::fqdn,
 )
 {
 
@@ -101,6 +105,7 @@ if $manage {
         allow_ipv4_address => $allow_ipv4_address,
         allow_ipv6_address => $allow_ipv6_address,
         allow_ipv6_netmask => $allow_ipv6_netmask,
+        origin             => $origin,
     }
 
     include ::postfix::service
