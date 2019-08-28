@@ -1,70 +1,50 @@
 #
-# == Class: postfix
+# @summary install and configures postfix MTA for basic mail sending
 #
-# Postfix class installs and configures postfix mail transfer agent for basic mail sending.
-#
-# == Parameters
-#
-# [*manage*]
-#   Whether to manage postfix with Puppet or not. Valid values are true
-#   (default) and false.
-# [*manage_packetfilter*]
-#   Manage packet filtering rules for postfix. Valid values are true (default) 
-#   and false.
-# [*manage_monit*]
-#   Monitor postfix with monit. Valid values are true (default) and false.
-# [*serveradmin*]
-#   An email address where mail for root should be sent to. Defaults to the 
-#   top-scope variable $::serveradmin.
-# [*relayhost*]
+# @param manage
+#   Whether to manage postfix with Puppet or not.
+# @param manage_packetfilter
+#   Manage packet filtering rules for postfix.
+# @param manage_monit
+#   Monitor postfix with monit.
+# @param serveradmin
+#   An email address where mail for root should be sent to.
+# @param relayhost
 #   The host used for relaying mail. Defaults to undef which means that Postfix 
 #   will try to send mail directly. An optional port can be added after the 
 #   hostname. Example: mail.domain.com:587
-# [*smtp_username*]
+# @param smtp_username
 #   Username to use for authenticating with the relayhost. Undef by default. 
 #   This should be given if the receiving SMTP server(s) block unauthenticated 
 #   SMTP connections. Encrypted connections are assumed. Note that this should 
 #   only be set if using a relayhost - local postfix instances as configured by 
 #   this module do not support or need SMTP authentication.
-# [*smtp_password*]
+# @param smtp_password
 #   Password for the SMTP user.
-# [*domain_mail_server*]
+# @param domain_mail_server
 #   Selects whether to configure this postfix instance to receive mail for the
-#   entire domain, or only for itself. Defaults to 'no'.
+#   entire domain, or only for itself.
 # [*inet_interfaces*]
 #   Interfaces and/or IPv4/IPv6 addresses on which postfix will listen on. 
-#   Special values are 'all' and 'loopback-only'. Defaults to 'loopback-only'.
+#   Special values are 'all' and 'loopback-only'.
 # [*smtp_host_lookup*]
 #   Value of smtp_host_lookup parameter in main.cf. Defaults to 'dns, native', 
 #   which typically seems to work best. In some cases reversing this lookup 
 #   order helps.
 # [*allow_ipv4_address*]
-#   Allow SNMP connections from this IPv4 address/subnet. Defaults to 127.0.0.1.
+#   Allow SNMP connections from this IPv4 address/subnet.
 # [*allow_ipv6_address*]
 #   The IP-address part of an IPv6 subnet from which to allow connections.
-#   Defaults to ::1.
 # [*allow_ipv6_netmask*]
-#   The netmask of the IPv6 subnet from which to allow connections. Defaults to
-#   128. This is required because postfix needs IPv6 addresses in [::1]/128
-#   format, which conflicts with puppet's array definitions.
+#   The netmask of the IPv6 subnet from which to allow connections. This is
+#   required because postfix needs IPv6 addresses in [::1]/128 format, which
+#   conflicts with puppet's array definitions.
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
-#   Defaults to top scope variable $::servermonitor.
 # [*origin*]
 #   The domain name that locally-posted mail appears to come from, and that
 #   locally posted mail is delivered to. The default, $::fqdn, is adequate for small sites.
 #
-# == Authors
-#
-# Samuli Seppänen <samuli.seppanen@gmail.com>
-#
-# Samuli Seppänen <samuli@openvpn.net>
-#
-# Mikko Vilpponen <vilpponen@protecomp.fi>
-#
-# == License
-#
-# BSD-license. See file LICENSE for details.
 #
 class postfix
 (
