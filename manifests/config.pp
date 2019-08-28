@@ -1,10 +1,9 @@
 #
-# == Class: postfix::config
-#
-# Configures Postfix mail transfer agent
+# @summary configures Postfix mail transfer agent
 #
 class postfix::config
 (
+    $root_email_to,
     $mailaliases,
     $generic_mappings,
     $relayhost,
@@ -24,8 +23,6 @@ class postfix::config
 
     # Configure SMTP authentication, if requested.
     if $smtp_username {
-        validate_string($smtp_username)
-        validate_string($smtp_password)
 
         file { 'postfix-sasl_passwd':
             ensure => file,
@@ -81,6 +78,12 @@ class postfix::config
         default  => "daemon_directory = ${::postfix::params::daemon_directory}",
     }
 
+    # The email address(es) to which root email is sent
+    $l_root_email_to = $root_email_to ? {
+      undef   => $serveradmin,
+      default => $root_email_to,
+    }
+
     file { 'postfix-main.cf':
         ensure  => present,
         name    => $::postfix::params::main_cf,
@@ -109,7 +112,7 @@ class postfix::config
     # Create standard mailaliases
     postfix::mailalias { 'postmaster':             recipient => $::os::params::adminuser, }
     postfix::mailalias { 'webmaster':              recipient => $::os::params::adminuser, }
-    postfix::mailalias { $::os::params::adminuser: recipient => $serveradmin, }
+    postfix::mailalias { $::os::params::adminuser: recipient => $l_root_email_to, }
 
     # Create additional mailaliases
     create_resources('postfix::mailalias', $mailaliases)

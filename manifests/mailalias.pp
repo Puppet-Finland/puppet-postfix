@@ -13,7 +13,7 @@
 #
 define postfix::mailalias
 (
-    $recipient
+    Variant[String,Array[String]] $recipient
 )
 {
     include ::postfix::params

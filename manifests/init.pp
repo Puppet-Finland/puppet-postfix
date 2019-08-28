@@ -52,6 +52,7 @@ class postfix
     Boolean          $manage_packetfilter = true,
     Boolean          $manage_monit = true,
     String           $serveradmin = $::serveradmin,
+    Optional[Variant[String,Array[String]]] $root_email_to = undef,
     Hash             $mailaliases = {},
     Hash             $generic_mappings = {},
     Optional[String] $relayhost = undef,
@@ -74,6 +75,7 @@ if $manage {
 
     class {'::postfix::config':
         serveradmin        => $serveradmin,
+        root_email_to      => $root_email_to,
         mailaliases        => $mailaliases,
         generic_mappings   => $generic_mappings,
         relayhost          => $relayhost,
