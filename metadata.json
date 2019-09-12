@@ -20,8 +20,8 @@
       "version_requirement": ">= 0.5.5"
     },
     {
-      "name": "puppetfinland/systemd",
-      "version_requirement": ">= 0.1.0"
+      "name": "camptocamp/systemd",
+      "version_requirement": ">= 2.6.0"
     },
     {
       "name": "puppetlabs/stdlib",
