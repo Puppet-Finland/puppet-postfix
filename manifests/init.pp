@@ -58,6 +58,7 @@ class postfix
     Optional[String] $relayhost = undef,
     Optional[String] $smtp_username = undef,
     Optional[String] $smtp_password = undef,
+    Optional[Enum['running']] $service_ensure = undef,
     Enum['yes','no'] $domain_mail_server = 'no',
     String           $inet_interfaces = 'loopback-only',
     String           $smtp_host_lookup = 'dns, native',
@@ -90,7 +91,9 @@ if $manage {
         origin             => $origin,
     }
 
-    include ::postfix::service
+    class { '::postfix::service':
+      ensure => $service_ensure,
+    }
 
     # FreeBSD requires additional configuration
     if $::operatingsystem == 'FreeBSD' {
