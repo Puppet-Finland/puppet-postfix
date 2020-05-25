@@ -48,3 +48,6 @@ smtp_tls_security_level = encrypt
 smtp_sasl_tls_security_options = noanonymous
 smtp_sasl_password_maps = hash:<%= scope['postfix::params::sasl_passwd'] %>
 <% end -%>
+<% if @non_smtpd_milters -%>
+non_smtpd_milters = <%= @non_smtpd_milters %>
+<% end -%>

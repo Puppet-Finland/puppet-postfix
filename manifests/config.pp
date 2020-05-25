@@ -12,6 +12,7 @@ class postfix::config
     $domain_mail_server,
     $inet_interfaces,
     $smtp_host_lookup,
+    $non_smtpd_milters,
     $allow_ipv4_address,
     $allow_ipv6_address,
     $allow_ipv6_netmask,

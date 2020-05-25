@@ -31,6 +31,8 @@
 #   Value of smtp_host_lookup parameter in main.cf. Defaults to 'dns, native', 
 #   which typically seems to work best. In some cases reversing this lookup 
 #   order helps.
+# [*non_smtpd_milters*]
+#   Passed as the non_smtpd_milters option to main.cf.
 # [*allow_ipv4_address*]
 #   Allow SNMP connections from this IPv4 address/subnet.
 # [*allow_ipv6_address*]
@@ -58,6 +60,7 @@ class postfix
     Optional[String] $relayhost = undef,
     Optional[String] $smtp_username = undef,
     Optional[String] $smtp_password = undef,
+    Optional[String] $non_smtpd_milters = undef,
     Optional[Enum['running']] $service_ensure = undef,
     Enum['yes','no'] $domain_mail_server = 'no',
     String           $inet_interfaces = 'loopback-only',
@@ -85,6 +88,7 @@ if $manage {
         domain_mail_server => $domain_mail_server,
         inet_interfaces    => $inet_interfaces,
         smtp_host_lookup   => $smtp_host_lookup,
+        non_smtpd_milters  => $non_smtpd_milters,
         allow_ipv4_address => $allow_ipv4_address,
         allow_ipv6_address => $allow_ipv6_address,
         allow_ipv6_netmask => $allow_ipv6_netmask,
