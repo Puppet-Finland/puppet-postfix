@@ -1,18 +1,13 @@
 #
-# == Class: postfix::service
+# @summary configure postfix to start on boot
 #
-# Configures postfix to start on boot
-#
-class postfix::service
-(
+class postfix::service (
   Optional[Enum['running']] $ensure
-)
-inherits postfix::params {
-
+) inherits postfix::params {
     service { 'postfix':
         ensure  => $ensure,
         enable  => true,
         name    => 'postfix',
-        require => Class['::postfix::install'],
+        require => Class['postfix::install'],
     }
 }

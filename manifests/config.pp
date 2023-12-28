@@ -1,8 +1,7 @@
 #
 # @summary configures Postfix mail transfer agent
 #
-class postfix::config
-(
+class postfix::config (
     $root_email_to,
     $mailaliases,
     $generic_mappings,
@@ -19,51 +18,47 @@ class postfix::config
     $origin,
     $serveradmin = 'none'
 
-) inherits postfix::params
-{
-
+) inherits postfix::params {
     # Configure SMTP authentication, if requested.
     if $smtp_username {
-
         file { 'postfix-sasl_passwd':
             ensure => file,
-            name   => $::postfix::params::sasl_passwd,
-            owner  => $::os::params::adminuser,
-            group  => $::os::params::admingroup,
+            name   => $postfix::params::sasl_passwd,
+            owner  => $os::params::adminuser,
+            group  => $os::params::admingroup,
             mode   => '0600',
         }
 
         file_line { "postfix-${relayhost}-${smtp_username}":
             ensure  => present,
-            path    => $::postfix::params::sasl_passwd,
+            path    => $postfix::params::sasl_passwd,
             line    => "${relayhost} ${smtp_username}:${smtp_password}",
             require => File['postfix-sasl_passwd'],
             notify  => Exec['postfix-update-sasl_passwd'],
         }
 
         exec { 'postfix-update-sasl_passwd':
-            command     => "postmap ${::postfix::params::sasl_passwd}",
-            path        => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin' ],
+            command     => "postmap ${postfix::params::sasl_passwd}",
+            path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin'],
             refreshonly => true,
-            user        => $::os::params::adminuser,
+            user        => $os::params::adminuser,
             require     => File_line["postfix-${relayhost}-${smtp_username}"],
         }
     }
 
     if ! empty($generic_mappings) {
-
-        $smtp_generic_maps_line = "smtp_generic_maps = ${::postfix::params::smtp_generic_maps}"
+        $smtp_generic_maps_line = "smtp_generic_maps = ${postfix::params::smtp_generic_maps}"
 
         file { 'postfix-generic':
             ensure => file,
-            name   => $::postfix::params::smtp_generic_maps_file,
-            owner  => $::os::params::adminuser,
-            group  => $::os::params::admingroup,
+            name   => $postfix::params::smtp_generic_maps_file,
+            owner  => $os::params::adminuser,
+            group  => $os::params::admingroup,
             mode   => '0644',
         }
 
         exec { 'postfix-postmap-generic':
-            command     => "postmap ${::postfix::params::smtp_generic_maps}",
+            command     => "postmap ${postfix::params::smtp_generic_maps}",
             cwd         => '/tmp',
             path        => ['/usr/sbin', '/usr/local/sbin'],
             refreshonly => true,
@@ -72,12 +67,7 @@ class postfix::config
         create_resources('postfix::generic_mapping', $generic_mappings)
     }
 
-    # Postfix on Ubuntu 16.04 fails to start if daemon_directory is defined. 
-    # This is related to changes between postfix 2.x and 3.x
-    $daemon_directory_line = $::lsbdistcodename ? {
-        'xenial' => undef,
-        default  => "daemon_directory = ${::postfix::params::daemon_directory}",
-    }
+    $daemon_directory_line = "daemon_directory = ${postfix::params::daemon_directory}"
 
     # The email address(es) to which root email is sent
     $l_root_email_to = $root_email_to ? {
@@ -86,14 +76,14 @@ class postfix::config
     }
 
     file { 'postfix-main.cf':
-        ensure  => present,
-        name    => $::postfix::params::main_cf,
+        ensure  => file,
+        name    => $postfix::params::main_cf,
         content => template('postfix/main.cf.erb'),
-        owner   => $::os::params::adminuser,
-        group   => $::os::params::admingroup,
+        owner   => $os::params::adminuser,
+        group   => $os::params::admingroup,
         mode    => '0644',
-        require => Class['::postfix::install'],
-        notify  => Class['::postfix::service'],
+        require => Class['postfix::install'],
+        notify  => Class['postfix::service'],
     }
 
     # Set default values on postfix-mailalias resources and define 
@@ -111,9 +101,9 @@ class postfix::config
     }
 
     # Create standard mailaliases
-    postfix::mailalias { 'postmaster':             recipient => $::os::params::adminuser, }
-    postfix::mailalias { 'webmaster':              recipient => $::os::params::adminuser, }
-    postfix::mailalias { $::os::params::adminuser: recipient => $l_root_email_to, }
+    postfix::mailalias { 'postmaster':           recipient => $os::params::adminuser, }
+    postfix::mailalias { 'webmaster':            recipient => $os::params::adminuser, }
+    postfix::mailalias { $os::params::adminuser: recipient => $l_root_email_to, }
 
     # Create additional mailaliases
     create_resources('postfix::mailalias', $mailaliases)

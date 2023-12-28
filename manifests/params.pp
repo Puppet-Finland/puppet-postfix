@@ -3,10 +3,9 @@
 #
 # Defines some variables based on the operating system
 class postfix::params {
+    include os::params
 
-    include ::os::params
-
-    case $::osfamily {
+    case $osfamily {
         'RedHat': {
             $package_name = 'postfix'
             $main_cf = '/etc/postfix/main.cf'
@@ -48,11 +47,11 @@ class postfix::params {
         }
     }
 
-    if $::systemd {
-        $service_start = "${::os::params::systemctl} start ${service_name}"
-        $service_stop = "${::os::params::systemctl} stop ${service_name}"
+    if $systemd {
+        $service_start = "${os::params::systemctl} start ${service_name}"
+        $service_stop = "${os::params::systemctl} stop ${service_name}"
     } else {
-        $service_start = "${::os::params::service_cmd} ${service_name} start"
-        $service_stop = "${::os::params::service_cmd} ${service_name} stop"
+        $service_start = "${os::params::service_cmd} ${service_name} start"
+        $service_stop = "${os::params::service_cmd} ${service_name} stop"
     }
 }
