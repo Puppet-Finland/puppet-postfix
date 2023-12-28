@@ -1,6 +1,8 @@
 #
 # @summary configure postfix to start on boot
 #
+# @param ensure
+#
 class postfix::service (
   Optional[Enum['running']] $ensure
 ) inherits postfix::params {

@@ -1,8 +1,10 @@
 #
-# == Class: postfix::packetfilter
+# @summary configures packet filtering rules for postfix
 #
-# Configures packet filtering rules for postfix
-#
+# @param ipv4_address
+#   Allow this IPv4 address to connect to SNMP port (25)
+# @param ipv6_address
+#   Allow this IPv6 address to connect to SNMP port (25)
 class postfix::packetfilter (
     $ipv4_address = '127.0.0.1',
     $ipv6_address = '::1'

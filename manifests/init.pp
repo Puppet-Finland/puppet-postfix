@@ -24,30 +24,36 @@
 # @param domain_mail_server
 #   Selects whether to configure this postfix instance to receive mail for the
 #   entire domain, or only for itself.
-# [*inet_interfaces*]
+# @param inet_interfaces
 #   Interfaces and/or IPv4/IPv6 addresses on which postfix will listen on. 
 #   Special values are 'all' and 'loopback-only'.
-# [*smtp_host_lookup*]
+# @param smtp_host_lookup
 #   Value of smtp_host_lookup parameter in main.cf. Defaults to 'dns, native', 
 #   which typically seems to work best. In some cases reversing this lookup 
 #   order helps.
-# [*non_smtpd_milters*]
+# @param non_smtpd_milters
 #   Passed as the non_smtpd_milters option to main.cf.
-# [*allow_ipv4_address*]
+# @param allow_ipv4_address
 #   Allow SNMP connections from this IPv4 address/subnet.
-# [*allow_ipv6_address*]
+# @param allow_ipv6_address
 #   The IP-address part of an IPv6 subnet from which to allow connections.
-# [*allow_ipv6_netmask*]
+# @param allow_ipv6_netmask
 #   The netmask of the IPv6 subnet from which to allow connections. This is
 #   required because postfix needs IPv6 addresses in [::1]/128 format, which
 #   conflicts with puppet's array definitions.
-# [*monitor_email*]
+# @param monitor_email
 #   Email address where local service monitoring software sends it's reports to.
-# [*origin*]
+# @param origin
 #   The domain name that locally-posted mail appears to come from, and that
 #   locally posted mail is delivered to. The default, $::fqdn, is adequate for small sites.
-#
-#
+# @param root_email_to
+#   Where to send root email
+# @param mailaliases
+#   A hash of mailaliases to realize
+# @param generic_mappings
+#   A hash of generic mappings to realize
+# @param service_ensure
+#   Status of the postfix service
 class postfix (
     Boolean          $manage = true,
     Boolean          $manage_packetfilter = true,

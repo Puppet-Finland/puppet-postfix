@@ -1,7 +1,6 @@
 #
-# == Class: postfix::params
+# @summary defines some variables based on the operating system
 #
-# Defines some variables based on the operating system
 class postfix::params {
     include os::params
 
