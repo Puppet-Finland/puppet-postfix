@@ -12,17 +12,17 @@
 #   Status of this generic mapping
 #
 define postfix::generic_mapping (
-    String                   $pattern = $title,
-    String                   $result = $postfix::config::smtp_username,
-    Enum['present','absent'] $ensure = 'present'
+  String                   $pattern = $title,
+  String                   $result = $postfix::config::smtp_username,
+  Enum['present','absent'] $ensure = 'present'
 ) {
-    include postfix::params
+  include postfix::params
 
-    file_line { "postfix-${title}":
-        ensure  => $ensure,
-        path    => $postfix::params::smtp_generic_maps_file,
-        line    => "${pattern} ${result}",
-        notify  => Exec['postfix-postmap-generic'],
-        require => File['postfix-generic'],
-    }
+  file_line { "postfix-${title}":
+    ensure  => $ensure,
+    path    => $postfix::params::smtp_generic_maps_file,
+    line    => "${pattern} ${result}",
+    notify  => Exec['postfix-postmap-generic'],
+    require => File['postfix-generic'],
+  }
 }
