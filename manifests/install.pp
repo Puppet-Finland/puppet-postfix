@@ -1,7 +1,5 @@
 #
-# == Class: postfix::install
-#
-# Installs postfix package
+# @summary install postfix package
 #
 class postfix::install inherits postfix::params {
     package { 'postfix':

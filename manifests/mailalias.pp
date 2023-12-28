@@ -1,14 +1,8 @@
 #
-# @summary
+# @summary add a mailalias to postfix
 #
-# Add a mail alias to postfix. This define is required because the resource collector only collects 
-# mailaliases with the "postfix-mailalias" tag, and requiring each entry in the 
-# $mailaliases hash to contain
-#
-#   tag => 'postfix-mailalias'
-#
-# would be just silly.
-#
+# @param recipient
+#   List of emails to use as recipient
 define postfix::mailalias (
     Variant[String,Array[String]] $recipient
 ) {

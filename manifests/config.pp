@@ -1,6 +1,22 @@
 #
 # @summary configures Postfix mail transfer agent
 #
+# @param root_email_to
+# @param mailaliases
+# @param generic_mappings
+# @param relayhost
+# @param smtp_username
+# @param smtp_password
+# @param domain_mail_server
+# @param inet_interfaces
+# @param smtp_host_lookup
+# @param non_smtpd_milters
+# @param allow_ipv4_address
+# @param allow_ipv6_address
+# @param allow_ipv6_netmask
+# @param origin
+# @param serveradmin = 'none'
+#
 class postfix::config (
     $root_email_to,
     $mailaliases,

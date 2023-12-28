@@ -1,7 +1,5 @@
 #
-# == Class: postfix::monit
-#
-# Setups monit rules for postfix
+# @summary sets up monit rules for postfix
 #
 class postfix::monit (
     $monitor_email
