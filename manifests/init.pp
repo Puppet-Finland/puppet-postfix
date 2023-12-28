@@ -102,7 +102,7 @@ class postfix (
     }
 
     # FreeBSD requires additional configuration
-    if $operatingsystem == 'FreeBSD' {
+    if $facts['os']['name'] == 'FreeBSD' {
       include postfix::config::freebsd
     }
 
