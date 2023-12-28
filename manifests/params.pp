@@ -29,12 +29,7 @@ class postfix::params {
             $smtp_generic_maps = "hash:${smtp_generic_maps_file}"
             $command_directory = '/usr/sbin'
             $service_name = 'postfix'
-
-            $daemon_directory = $::lsbdistcodename ? {
-                /(stretch|buster|bionic|focal)/ => '/usr/lib/postfix/sbin',
-                default                         => '/usr/lib/postfix',
-            }
-
+            $daemon_directory = '/usr/lib/postfix/sbin'
         }
         'FreeBSD': {
             $package_name = 'mail/postfix'
