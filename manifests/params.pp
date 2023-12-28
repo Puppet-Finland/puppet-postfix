@@ -4,7 +4,7 @@
 class postfix::params {
   include os::params
 
-  case $osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $package_name = 'postfix'
       $main_cf = '/etc/postfix/main.cf'
