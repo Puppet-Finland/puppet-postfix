@@ -4,12 +4,12 @@
 # @param recipient
 #   List of emails to use as recipient
 define postfix::mailalias (
-    Variant[String,Array[String]] $recipient
+  Variant[String,Array[String]] $recipient
 ) {
-    include postfix::params
+  include postfix::params
 
-    mailalias { $title:
-        recipient => $recipient,
-        tag       => 'postfix-mailalias',
-    }
+  mailalias { $title:
+    recipient => $recipient,
+    tag       => 'postfix-mailalias',
+  }
 }

@@ -55,46 +55,46 @@
 # @param service_ensure
 #   Status of the postfix service
 class postfix (
-    Boolean          $manage = true,
-    Boolean          $manage_packetfilter = true,
-    Boolean          $manage_monit = true,
-    String           $serveradmin = $::serveradmin,
-    Optional[Variant[String,Array[String]]] $root_email_to = undef,
-    Hash             $mailaliases = {},
-    Hash             $generic_mappings = {},
-    Optional[String] $relayhost = undef,
-    Optional[String] $smtp_username = undef,
-    Optional[String] $smtp_password = undef,
-    Optional[String] $non_smtpd_milters = undef,
-    Optional[Enum['running']] $service_ensure = undef,
-    Enum['yes','no'] $domain_mail_server = 'no',
-    String           $inet_interfaces = 'loopback-only',
-    String           $smtp_host_lookup = 'dns, native',
-    String           $allow_ipv4_address = '127.0.0.1',
-    String           $allow_ipv6_address = '::1',
-    String           $allow_ipv6_netmask = '128',
-    String           $monitor_email = $::servermonitor,
-    String           $origin = $::fqdn,
+  Boolean          $manage = true,
+  Boolean          $manage_packetfilter = true,
+  Boolean          $manage_monit = true,
+  String           $serveradmin = $facts['serveradmin'],
+  Optional[Variant[String,Array[String]]] $root_email_to = undef,
+  Hash             $mailaliases = {},
+  Hash             $generic_mappings = {},
+  Optional[String] $relayhost = undef,
+  Optional[String] $smtp_username = undef,
+  Optional[String] $smtp_password = undef,
+  Optional[String] $non_smtpd_milters = undef,
+  Optional[Enum['running']] $service_ensure = undef,
+  Enum['yes','no'] $domain_mail_server = 'no',
+  String           $inet_interfaces = 'loopback-only',
+  String           $smtp_host_lookup = 'dns, native',
+  String           $allow_ipv4_address = '127.0.0.1',
+  String           $allow_ipv6_address = '::1',
+  String           $allow_ipv6_netmask = '128',
+  String           $monitor_email = $facts['servermonitor'],
+  String           $origin = $facts['networking']['fqdn'],
 ) {
-if $manage {
+  if $manage {
     include postfix::install
 
     class { 'postfix::config':
-        serveradmin        => $serveradmin,
-        root_email_to      => $root_email_to,
-        mailaliases        => $mailaliases,
-        generic_mappings   => $generic_mappings,
-        relayhost          => $relayhost,
-        smtp_username      => $smtp_username,
-        smtp_password      => $smtp_password,
-        domain_mail_server => $domain_mail_server,
-        inet_interfaces    => $inet_interfaces,
-        smtp_host_lookup   => $smtp_host_lookup,
-        non_smtpd_milters  => $non_smtpd_milters,
-        allow_ipv4_address => $allow_ipv4_address,
-        allow_ipv6_address => $allow_ipv6_address,
-        allow_ipv6_netmask => $allow_ipv6_netmask,
-        origin             => $origin,
+      serveradmin        => $serveradmin,
+      root_email_to      => $root_email_to,
+      mailaliases        => $mailaliases,
+      generic_mappings   => $generic_mappings,
+      relayhost          => $relayhost,
+      smtp_username      => $smtp_username,
+      smtp_password      => $smtp_password,
+      domain_mail_server => $domain_mail_server,
+      inet_interfaces    => $inet_interfaces,
+      smtp_host_lookup   => $smtp_host_lookup,
+      non_smtpd_milters  => $non_smtpd_milters,
+      allow_ipv4_address => $allow_ipv4_address,
+      allow_ipv6_address => $allow_ipv6_address,
+      allow_ipv6_netmask => $allow_ipv6_netmask,
+      origin             => $origin,
     }
 
     class { 'postfix::service':
@@ -103,20 +103,20 @@ if $manage {
 
     # FreeBSD requires additional configuration
     if $operatingsystem == 'FreeBSD' {
-        include postfix::config::freebsd
+      include postfix::config::freebsd
     }
 
     if $manage_packetfilter {
-        class { 'postfix::packetfilter':
-            ipv4_address => $allow_ipv4_address,
-            ipv6_address => "${allow_ipv6_address}/${allow_ipv6_netmask}",
-        }
+      class { 'postfix::packetfilter':
+        ipv4_address => $allow_ipv4_address,
+        ipv6_address => "${allow_ipv6_address}/${allow_ipv6_netmask}",
+      }
     }
 
     if $manage_monit {
-        class { 'postfix::monit':
-            monitor_email => $monitor_email,
-        }
+      class { 'postfix::monit':
+        monitor_email => $monitor_email,
+      }
     }
-}
+  }
 }
