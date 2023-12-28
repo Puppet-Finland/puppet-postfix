@@ -1,9 +1,7 @@
 #
-# == Define: postfix::mailalias
+# @summary
 #
-# Add a mail alias to postfix.
-#
-# This define is required because the resource collector only collects 
+# Add a mail alias to postfix. This define is required because the resource collector only collects 
 # mailaliases with the "postfix-mailalias" tag, and requiring each entry in the 
 # $mailaliases hash to contain
 #
@@ -11,12 +9,10 @@
 #
 # would be just silly.
 #
-define postfix::mailalias
-(
+define postfix::mailalias (
     Variant[String,Array[String]] $recipient
-)
-{
-    include ::postfix::params
+) {
+    include postfix::params
 
     mailalias { $title:
         recipient => $recipient,

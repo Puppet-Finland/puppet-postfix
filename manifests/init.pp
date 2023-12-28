@@ -48,8 +48,7 @@
 #   locally posted mail is delivered to. The default, $::fqdn, is adequate for small sites.
 #
 #
-class postfix
-(
+class postfix (
     Boolean          $manage = true,
     Boolean          $manage_packetfilter = true,
     Boolean          $manage_monit = true,
@@ -70,14 +69,11 @@ class postfix
     String           $allow_ipv6_netmask = '128',
     String           $monitor_email = $::servermonitor,
     String           $origin = $::fqdn,
-)
-{
-
+) {
 if $manage {
+    include postfix::install
 
-    include ::postfix::install
-
-    class {'::postfix::config':
+    class { 'postfix::config':
         serveradmin        => $serveradmin,
         root_email_to      => $root_email_to,
         mailaliases        => $mailaliases,
@@ -95,24 +91,24 @@ if $manage {
         origin             => $origin,
     }
 
-    class { '::postfix::service':
+    class { 'postfix::service':
       ensure => $service_ensure,
     }
 
     # FreeBSD requires additional configuration
-    if $::operatingsystem == 'FreeBSD' {
-        include ::postfix::config::freebsd
+    if $operatingsystem == 'FreeBSD' {
+        include postfix::config::freebsd
     }
 
     if $manage_packetfilter {
-        class {'::postfix::packetfilter':
+        class { 'postfix::packetfilter':
             ipv4_address => $allow_ipv4_address,
             ipv6_address => "${allow_ipv6_address}/${allow_ipv6_netmask}",
         }
     }
 
     if $manage_monit {
-        class { '::postfix::monit':
+        class { 'postfix::monit':
             monitor_email => $monitor_email,
         }
     }
